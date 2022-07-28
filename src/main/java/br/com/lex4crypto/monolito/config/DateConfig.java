@@ -1,4 +1,4 @@
-package br.com.lexluto.monolito.config;
+package br.com.lex4crypto.monolito.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

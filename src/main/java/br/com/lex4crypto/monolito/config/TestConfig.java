@@ -1,4 +1,4 @@
-package br.com.lexluto.monolito.config;
+package br.com.lex4crypto.monolito.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
