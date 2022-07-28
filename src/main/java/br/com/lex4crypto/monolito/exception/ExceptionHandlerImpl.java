@@ -14,6 +14,11 @@ public class ExceptionHandlerImpl {
         return ResponseEntity.notFound().build();
     }
 
+    @ExceptionHandler(UsuarioNotFoundException.class)
+    public ResponseEntity<String> handleUsuarioNotFound(UsuarioNotFoundException ex) {
+        return ResponseEntity.badRequest().body("Usuário não encontrado");
+    }
+
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ResponseEntity<String> handleValidationExceptions(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest().body("Informação inválida");
