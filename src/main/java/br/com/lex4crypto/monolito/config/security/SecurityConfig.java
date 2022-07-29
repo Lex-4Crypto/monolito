@@ -1,4 +1,4 @@
-package br.com.lexluto.monolito.config.security;
+package br.com.lex4crypto.monolito.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
+    @Bean //Restrições
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
@@ -25,22 +25,22 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+    @Bean //Usuário (em memória)
     public UserDetailsService users() {
         UserDetails user = User.builder()
                 .username("user")
                 .password(passwordEncoder().encode("1212"))
-                .roles("USER")
+                .roles("USER") //Permissões
                 .build();
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder().encode("1212"))
-                .roles("USER", "ADMIN")
+                .roles("USER", "ADMIN") //Permissões
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }
 
-    @Bean
+    @Bean //Criptografia
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
