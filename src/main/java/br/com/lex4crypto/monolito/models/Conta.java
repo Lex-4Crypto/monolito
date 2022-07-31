@@ -14,20 +14,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Carteira {
+public class Conta {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
-    private Integer criptoMoeda;
-
-    private BigDecimal quantidade;
-
-    public void setCriptoMoeda(CriptoMoeda criptoMoeda){
-        if(criptoMoeda != null) {
-            this.criptoMoeda = criptoMoeda.getIdentificador();
-        }
-    }
-
+    private String moeda = "Real";
+    private BigDecimal saldo;
 }
