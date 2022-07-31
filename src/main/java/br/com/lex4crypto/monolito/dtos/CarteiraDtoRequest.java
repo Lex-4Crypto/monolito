@@ -10,10 +10,13 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarteiraDto {
+public class CarteiraDtoRequest {
+
+    @NotNull
+    private String nomeUsuario;
     @NotNull
     private CriptoMoeda criptoMoeda;
-
+    @NotNull
     private BigDecimal quantidade;
 
 }

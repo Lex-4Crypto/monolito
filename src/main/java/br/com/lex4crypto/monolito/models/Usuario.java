@@ -27,7 +27,7 @@ public class Usuario implements UserDetails, Serializable { //implementacao da i
     private String chavePix;
 
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn (name = "carteira_id")
+    @JoinColumn (name = "usuario_id")
     private List<Carteira> carteiras = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

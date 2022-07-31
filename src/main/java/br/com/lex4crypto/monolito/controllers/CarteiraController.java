@@ -1,9 +1,9 @@
 package br.com.lex4crypto.monolito.controllers;
 
 import br.com.lex4crypto.monolito.service.CarteiraService;
-import br.com.lex4crypto.monolito.dtos.CarteiraDto;
+import br.com.lex4crypto.monolito.dtos.CarteiraDtoRequest;
 import br.com.lex4crypto.monolito.models.Carteira;
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +21,9 @@ public class CarteiraController {
     }
 
     @PostMapping
-    public ResponseEntity<Carteira> save(@RequestBody @Valid CarteiraDto carteiraDto){
-        var carteira = new Carteira();
-        BeanUtils.copyProperties(carteiraDto, carteira);
-        return ResponseEntity.status(HttpStatus.CREATED).body(carteiraService.save(carteira));
+    public ResponseEntity<Carteira> save(@RequestBody @Valid CarteiraDtoRequest carteiraDtoRequest){
+        Carteira carteira = carteiraService.save(carteiraDtoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(carteira);
     }
 
     @GetMapping
@@ -37,9 +36,14 @@ public class CarteiraController {
         return ResponseEntity.status(HttpStatus.OK).body(carteiraService.findById(id));
     }
 
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<Carteira>> findByUsuarioId(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(carteiraService.findAllByUsuarioId(id));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Carteira> update(@PathVariable Long id, @RequestBody @Valid CarteiraDto carteiraDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(carteiraService.update(id, carteiraDto));
+    public ResponseEntity<Carteira> update(@PathVariable Long id, @RequestBody @Valid CarteiraDtoRequest carteiraDtoRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(carteiraService.update(id, carteiraDtoRequest));
     }
 
     @DeleteMapping("/{id}")
