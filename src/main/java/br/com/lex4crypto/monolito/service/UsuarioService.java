@@ -1,8 +1,6 @@
 package br.com.lex4crypto.monolito.service;
 
-import br.com.lex4crypto.monolito.dtos.UsuarioDto;
-import br.com.lex4crypto.monolito.models.Carteira;
-import br.com.lex4crypto.monolito.models.CriptoMoeda;
+import br.com.lex4crypto.monolito.dtos.UsuarioDtoRequest;
 import br.com.lex4crypto.monolito.models.Usuario;
 import br.com.lex4crypto.monolito.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +21,7 @@ import java.util.List;
 public class UsuarioService implements UserDetailsService {
 
     final UsuarioRepository usuarioRepository;
+    final PasswordEncoder passwordEncoder;
 
     //metodo para carregar usuario do login
     @Override
@@ -39,14 +39,10 @@ public class UsuarioService implements UserDetailsService {
 
     public Usuario saveUsuario(Usuario usuario){
 
-        // cria carteiras de crypto
-        for (int i = 1; i <= CriptoMoeda.values().length; i++){
-            usuario.getCarteiras().add(new Carteira(null, i, BigDecimal.ZERO));
-        }
-
         //cria carteira principal (id = null (db cria) / moeda = "Real")
         usuario.getConta().setSaldo(BigDecimal.ZERO);
-
+        String senhaEncriptada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaEncriptada);
         return usuarioRepository.save(usuario);
     }
 
@@ -61,7 +57,7 @@ public class UsuarioService implements UserDetailsService {
         return usuario;
     }
 
-    public Usuario update(Long id, UsuarioDto usuarioDto){
+    public Usuario update(Long id, UsuarioDtoRequest usuarioDto){
         Usuario usuario = findById(id);
         usuario.setNome(usuarioDto.getNome());
         return usuarioRepository.save(usuario);

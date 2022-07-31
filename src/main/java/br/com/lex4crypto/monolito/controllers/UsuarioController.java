@@ -1,6 +1,6 @@
 package br.com.lex4crypto.monolito.controllers;
 
-import br.com.lex4crypto.monolito.dtos.UsuarioDto;
+import br.com.lex4crypto.monolito.dtos.UsuarioDtoRequest;
 import br.com.lex4crypto.monolito.models.Usuario;
 import br.com.lex4crypto.monolito.service.UsuarioService;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +24,7 @@ public class UsuarioController {
 
     @PreAuthorize("permitAll")
     @PostMapping
-    public ResponseEntity<Usuario> save(@RequestBody @Valid UsuarioDto usuarioDto){
+    public ResponseEntity<Usuario> save(@RequestBody @Valid UsuarioDtoRequest usuarioDto){
         var usuario = new Usuario();
         BeanUtils.copyProperties(usuarioDto, usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuario));
@@ -42,7 +42,7 @@ public class UsuarioController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody @Valid UsuarioDto usuarioDto) {
+    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody @Valid UsuarioDtoRequest usuarioDto) {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.update(id, usuarioDto));
     }
 

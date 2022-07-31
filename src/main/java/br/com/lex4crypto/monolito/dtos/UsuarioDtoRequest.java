@@ -9,11 +9,13 @@ import javax.validation.constraints.NotNull;
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UsuarioDto {
+    public class UsuarioDtoRequest {
         @NotNull
         private String nome;
         @NotNull
         private String nomeUsuario;
         @NotNull
         private String senha;
+        @NotNull
+        private String chavePix;
     }
