@@ -2,10 +2,10 @@ package br.com.lex4crypto.monolito.models;
 
 public enum CriptoMoeda {
 
-    BITCOIN(1),
-    ETHEREUM(2),
-    CARDANO(3),
-    SOLANA(4);
+    BITCOIN(0),
+    ETHEREUM(1),
+    CARDANO(2),
+    SOLANA(3);
 
     private int identificador;
 
