@@ -11,8 +11,8 @@ public class OrdemCompra implements Ordem {
     private Double quantidade;
 
     @Override
-    public void executar(Usuario usuario) {
-        BigDecimal saldoUsuario = usuario.getConta().getSaldo();
+    public void executar(Cliente cliente) {
+        BigDecimal saldoUsuario = cliente.getConta().getSaldo();
         if (valorCriptoMoeda.compareTo(saldoUsuario)<0){
             //Não pode executar
         }else {

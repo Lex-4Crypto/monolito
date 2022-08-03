@@ -1,13 +1,11 @@
 package br.com.lex4crypto.monolito.models;
 
+import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
@@ -18,16 +16,8 @@ public class Carteira {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
-    private Integer criptoMoeda;
-
+    @Enumerated(EnumType.STRING)
+    private CryptoMoeda cryptoMoeda;
     private BigDecimal quantidade;
-
-    public void setCriptoMoeda(CriptoMoeda criptoMoeda){
-        if(criptoMoeda != null) {
-            this.criptoMoeda = criptoMoeda.getIdentificador();
-        }
-    }
 
 }

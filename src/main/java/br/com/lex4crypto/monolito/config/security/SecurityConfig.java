@@ -20,9 +20,6 @@ public class SecurityConfig {
         http.httpBasic()
                 .and()
                 .authorizeHttpRequests()
-//                .antMatchers(HttpMethod.GET, "/usuarios/**").hasRole("USER")
-//                .antMatchers(HttpMethod.POST, "/parking-spot").hasRole("USER")
-//                .antMatchers(HttpMethod.DELETE, "/parking-spot/**").hasAnyRole("USER","ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

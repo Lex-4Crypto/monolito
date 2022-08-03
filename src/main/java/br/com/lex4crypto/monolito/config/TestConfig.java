@@ -42,16 +42,16 @@ public class TestConfig implements CommandLineRunner {
         Permissao permissaoAdmin = permissaoRepository.findByTipoPermissao(TipoPermissao.ROLE_ADMIN);
 
         Usuario user1 = new Usuario();
-        user1.setNome("joao");
-        user1.setNomeUsuario("joao123");
-        user1.setSenha(passwordEncoder.encode("1212"));
-        user1.setPermissoes(List.of(permissaoUser));
+        user1.setUserName("joao");
+        user1.setUserName("joao123");
+        user1.setPassword(passwordEncoder.encode("1212"));
+        user1.setAuthorities(List.of(permissaoUser));
 
         Usuario user2 = new Usuario();
-        user2.setNome("kleber");
-        user2.setNomeUsuario("kleber123");
-        user2.setSenha(passwordEncoder.encode("1212"));
-        user2.setPermissoes(List.of(permissaoAdmin, permissaoUser));
+        user2.setUserName("kleber");
+        user2.setUserName("kleber123");
+        user2.setPassword(passwordEncoder.encode("1212"));
+        user2.setAuthorities(List.of(permissaoAdmin, permissaoUser));
 
         usuarioRepository.save(user1);
         usuarioRepository.save(user2);

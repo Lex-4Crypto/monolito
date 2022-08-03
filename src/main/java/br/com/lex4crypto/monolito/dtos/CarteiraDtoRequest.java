@@ -1,6 +1,6 @@
 package br.com.lex4crypto.monolito.dtos;
 
-import br.com.lex4crypto.monolito.models.CriptoMoeda;
+import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 public class CarteiraDtoRequest {
 
     @NotNull
-    private String nomeUsuario;
+    private String userName;
     @NotNull
-    private CriptoMoeda criptoMoeda;
+    private CryptoMoeda cryptoMoeda;
     @NotNull
     private BigDecimal quantidade;
 

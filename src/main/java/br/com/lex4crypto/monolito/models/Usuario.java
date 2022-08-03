@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,37 +22,25 @@ public class Usuario implements UserDetails, Serializable { //implementacao da i
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-    private String chavePix;
-
-    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn (name = "usuario_id")
-    private List<Carteira> carteiras = new ArrayList<>();
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "carteira_principal_id")
-    private Conta conta = new Conta();
-
-    //atributos login
     @Column(unique = true)
-    private String nomeUsuario;
-    private String senha;
+    private String userName;
+    private String password;
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Permissao> permissoes = new ArrayList<>();
+    private Collection<Permissao> authorities = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return permissoes;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return senha;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return nomeUsuario;
+        return userName;
     }
 
     @Override
