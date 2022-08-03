@@ -5,17 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-    @Data
+@Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UsuarioDtoRequest {
+    public class ClienteDtoRequest {
         @NotNull
+        @Size(min = 3, max = 50)
         private String nome;
         @NotNull
-        private String nomeUsuario;
+        @Size(min = 3, max = 50)
+        private String userName;
         @NotNull
+        @Size(min = 3, max = 50)
         private String senha;
-        @NotNull
-        private String chavePix;
     }
