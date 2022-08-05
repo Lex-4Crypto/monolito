@@ -8,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,8 +28,16 @@ public class CorretoraController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/ordem")
     ResponseEntity<OrdemDtoResponse> solicitarOrdem(@RequestBody @Valid OrdemDtoRequest ordemDtoRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(corretoraService.processarOrdem(ordemDtoRequest));
+        //return ResponseEntity.status(HttpStatus.CREATED).body(corretoraService.processarOrdem(ordemDtoRequest));
+        return null;
+    }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/ordens/vendas")
+    ResponseEntity<OrdemDtoResponse> lancarVenda(@RequestBody @Valid OrdemDtoRequest ordemDtoRequest) {
+        OrdemDtoResponse response = corretoraService.lancarVenda(ordemDtoRequest);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("corretoras/ordens/vendas").toUriString());
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping

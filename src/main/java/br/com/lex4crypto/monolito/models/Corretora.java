@@ -19,7 +19,7 @@ public class Corretora {
     private double taxaCorretagem;
 
     private boolean validarTransacao(Ordem ordem, Cliente cliente){
-        ordem.executar(cliente);
+        //ordem.executar(cliente);
         return false;
     }
 }

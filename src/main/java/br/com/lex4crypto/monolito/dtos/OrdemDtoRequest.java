@@ -15,14 +15,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class OrdemDtoRequest {
 
-    @NotNull
-    private TipoOrdem tipoOrdem;
+//    @NotNull
+//    private TipoOrdem tipoOrdem;
     @NotNull
     private CryptoMoeda cryptoMoeda;
     @NotNull
     private BigDecimal quantidade;
     @NotNull
-    private BigDecimal valor;
+    private BigDecimal valorUnitario;
     @NotNull
     private String usernameCliente;
 
