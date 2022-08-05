@@ -1,7 +1,8 @@
-package br.com.lex4crypto.monolito.models.interfaces;
+package br.com.lex4crypto.monolito.models;
 
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.enums.TipoOrdem;
+import br.com.lex4crypto.monolito.models.Carteira;
 import br.com.lex4crypto.monolito.models.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,6 @@ public abstract class Ordem {
     protected BigDecimal valorTaxaCorretagem;
     protected BigDecimal valorTotal;
     protected String usernameCliente;
-
-
-    public abstract void executar(Cliente cliente);
 }
+
+
