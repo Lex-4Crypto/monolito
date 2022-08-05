@@ -16,11 +16,15 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class OrdemCompra extends Ordem {
+public class OrdemVenda extends Ordem {
 
     @Override
     public void executar(Cliente cliente) {
-
+        BigDecimal saldoUsuario = cliente.getConta().getSaldo();
+        if (valorCriptoMoeda.compareTo(saldoUsuario)<0){
+            //Não pode executar
+        }else {
+            //executar a ordem
+        }
     }
 }

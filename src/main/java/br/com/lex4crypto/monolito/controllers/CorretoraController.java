@@ -25,7 +25,7 @@ public class CorretoraController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/ordem")
     ResponseEntity<OrdemDtoResponse> solicitarOrdem(@RequestBody @Valid OrdemDtoRequest ordemDtoRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(corretoraService.solicitarOrdem(ordemDtoRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(corretoraService.processarOrdem(ordemDtoRequest));
 
     }
 

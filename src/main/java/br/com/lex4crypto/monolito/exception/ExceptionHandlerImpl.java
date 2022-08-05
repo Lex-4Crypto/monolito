@@ -29,5 +29,4 @@ public class ExceptionHandlerImpl {
         return ResponseEntity.badRequest().body("Informação inválida");
     }
 
-
 }

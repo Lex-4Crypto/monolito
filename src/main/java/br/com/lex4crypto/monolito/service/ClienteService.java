@@ -48,6 +48,11 @@ public class ClienteService implements UserDetailsService {
 
     }
 
+    public Cliente findClienteByUsername(String username){
+        return clienteRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found! Username: " + username));
+    }
+
     public Cliente saveUsuario(ClienteDtoRequest clienteDtoRequest){
         // cria novo Cliente e Usuario
         Usuario usuario = new Usuario();

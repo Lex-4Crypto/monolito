@@ -18,7 +18,8 @@ public class OrdemDtoResponse {
     private TipoOrdem tipoOrdem;
     private CryptoMoeda cryptoMoeda;
     private BigDecimal quantidade;
-    private BigDecimal valor;
+    private BigDecimal valorUnitario;
     private BigDecimal taxaCorretagem;
+    private BigDecimal valorTotal;
 
 }
