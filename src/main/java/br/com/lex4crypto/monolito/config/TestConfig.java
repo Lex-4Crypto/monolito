@@ -1,10 +1,13 @@
 package br.com.lex4crypto.monolito.config;
 
+import br.com.lex4crypto.monolito.enums.TipoOrdem;
 import br.com.lex4crypto.monolito.enums.TipoPermissao;
-import br.com.lex4crypto.monolito.models.Permissao;
-import br.com.lex4crypto.monolito.models.Usuario;
+import br.com.lex4crypto.monolito.models.*;
+import br.com.lex4crypto.monolito.models.livros.Livro;
+import br.com.lex4crypto.monolito.models.livros.LivroBitcoin;
 import br.com.lex4crypto.monolito.repositories.PermissaoRepository;
 import br.com.lex4crypto.monolito.repositories.UsuarioRepository;
+import br.com.lex4crypto.monolito.repositories.livros.LivroBitcoinRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +58,8 @@ public class TestConfig implements CommandLineRunner {
 
         usuarioRepository.save(user1);
         usuarioRepository.save(user2);
+
+
 
     }
 }
