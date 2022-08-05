@@ -13,14 +13,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 
 public class OrdemCompra extends Ordem {
 
+    //efetuar compra
+    //salvar no livro
+
+
     @Override
     public void executar(Cliente cliente) {
+
 
     }
 }

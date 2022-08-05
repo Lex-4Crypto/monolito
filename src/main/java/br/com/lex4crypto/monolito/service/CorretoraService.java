@@ -50,9 +50,6 @@ public class CorretoraService {
             throw new SaldoInsuficienteException("Saldo insuficiente");
         }
 
-        //efetuar compra
-
-        //salvar no livro
         return null;
     }
 
