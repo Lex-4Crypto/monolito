@@ -1,7 +1,6 @@
 package br.com.lex4crypto.monolito.service.livros;
 
-import br.com.lex4crypto.monolito.models.interfaces.Ordem;
-import br.com.lex4crypto.monolito.models.livros.LivroCardano;
+import br.com.lex4crypto.monolito.models.Ordem;
 import br.com.lex4crypto.monolito.models.livros.LivroSolana;
 import br.com.lex4crypto.monolito.repositories.livros.LivroSolanaRepository;
 import org.springframework.stereotype.Service;

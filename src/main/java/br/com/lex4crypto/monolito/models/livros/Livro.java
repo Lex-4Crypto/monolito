@@ -1,6 +1,6 @@
 package br.com.lex4crypto.monolito.models.livros;
 
-import br.com.lex4crypto.monolito.models.interfaces.Ordem;
+import br.com.lex4crypto.monolito.models.Ordem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

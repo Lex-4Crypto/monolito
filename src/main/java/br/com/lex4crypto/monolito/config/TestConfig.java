@@ -1,8 +1,13 @@
 package br.com.lex4crypto.monolito.config;
 
+import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.enums.TipoPermissao;
-import br.com.lex4crypto.monolito.models.Permissao;
-import br.com.lex4crypto.monolito.models.Usuario;
+import br.com.lex4crypto.monolito.models.*;
+import br.com.lex4crypto.monolito.models.livros.LivroBitcoin;
+import br.com.lex4crypto.monolito.models.livros.LivroCardano;
+import br.com.lex4crypto.monolito.models.livros.LivroEthereum;
+import br.com.lex4crypto.monolito.models.livros.LivroSolana;
+import br.com.lex4crypto.monolito.repositories.ClienteRepository;
 import br.com.lex4crypto.monolito.repositories.PermissaoRepository;
 import br.com.lex4crypto.monolito.repositories.UsuarioRepository;
 import br.com.lex4crypto.monolito.repositories.livros.LivroBitcoinRepository;
