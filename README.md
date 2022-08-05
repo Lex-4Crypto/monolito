@@ -1,3 +1,5 @@
+![CircleCI](https://img.shields.io/circleci/build/gh/Lex-4Crypto/monolito/main)
+
 # Projeto Lex
 
 ### disciplina: Arquitetura de Software e Ágil I (BE-JV-009)
