@@ -2,7 +2,6 @@ package br.com.lex4crypto.monolito.models.livros;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,9 +11,8 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class LivroBitcoin extends Livro {
+public class LivroSolana extends Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
 }

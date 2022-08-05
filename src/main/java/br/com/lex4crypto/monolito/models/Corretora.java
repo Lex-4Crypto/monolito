@@ -1,10 +1,12 @@
 package br.com.lex4crypto.monolito.models;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 
 @Data
 @AllArgsConstructor
@@ -19,5 +21,5 @@ public class Corretora {
     /*private boolean validarTransacao(Ordem ordem, Cliente cliente){
         ordem.executar(cliente);
         return false;
-    } */
+    }*/
 }

@@ -61,7 +61,7 @@ public class CarteiraService {
     public Carteira findById(Long id){
         return carteiraRepository
                 .findById(id)
-                .orElseThrow(CarteiraNotFoundException::new);
+                .orElseThrow(() -> new CarteiraNotFoundException("Carteira não encontrada. Id: " + id));
     }
 
     public List<Carteira> findAllByClienteId(Long id){
