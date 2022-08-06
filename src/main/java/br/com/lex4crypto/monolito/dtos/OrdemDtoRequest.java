@@ -1,6 +1,7 @@
 package br.com.lex4crypto.monolito.dtos;
 
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
+import br.com.lex4crypto.monolito.enums.StatusOrdem;
 import br.com.lex4crypto.monolito.enums.TipoOrdem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +26,6 @@ public class OrdemDtoRequest {
     private BigDecimal valorUnitario;
     @NotNull
     private String usernameCliente;
+
 
 }
