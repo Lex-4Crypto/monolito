@@ -39,7 +39,7 @@ public class CarteiraControllerTest {
         given()
                 .when()
                 .auth()
-                .basic("joao123","1212" )
+                .basic("joao1","1212" )
                 .get("/carteiras")
                 .then()
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
