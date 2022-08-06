@@ -8,7 +8,6 @@ import br.com.lex4crypto.monolito.exception.SaldoInsuficienteException;
 import br.com.lex4crypto.monolito.models.Carteira;
 import br.com.lex4crypto.monolito.models.Cliente;
 import br.com.lex4crypto.monolito.models.Ordem;
-import br.com.lex4crypto.monolito.repositories.CorretoraRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.util.List;
 @Service
 public class CorretoraService {
 
-    private final CorretoraRepository corretoraRepository;
     private final ClienteService clienteService;
     private final VendaService vendaService;
     private final LivroService livroService;
@@ -27,8 +25,7 @@ public class CorretoraService {
 
     private static final BigDecimal TAXA_CORRETAGEM = BigDecimal.valueOf(0.005);
 
-    public CorretoraService(CorretoraRepository corretoraRepository, ClienteService clienteService, VendaService vendaService, LivroService livroService, CarteiraService carteiraService, OrdemService ordemService) {
-        this.corretoraRepository = corretoraRepository;
+    public CorretoraService(ClienteService clienteService, VendaService vendaService, LivroService livroService, CarteiraService carteiraService, OrdemService ordemService) {
         this.clienteService = clienteService;
         this.vendaService = vendaService;
         this.livroService = livroService;
@@ -72,6 +69,10 @@ public class CorretoraService {
     }
 
     public Ordem processarOrdemCompra(OrdemDtoRequest ordemDtoRequest) {
+
+        
+
+
         //verificar se há ordem de venda no livro
         //Se não retornar uma exceção
 

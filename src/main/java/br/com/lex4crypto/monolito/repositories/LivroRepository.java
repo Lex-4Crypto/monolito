@@ -1,6 +1,6 @@
 package br.com.lex4crypto.monolito.repositories;
 
-import br.com.lex4crypto.monolito.models.livros.Livro;
+import br.com.lex4crypto.monolito.models.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

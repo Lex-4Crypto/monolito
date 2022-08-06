@@ -1,4 +1,4 @@
-package br.com.lex4crypto.monolito.models.livros;
+package br.com.lex4crypto.monolito.models;
 
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.models.Ordem;

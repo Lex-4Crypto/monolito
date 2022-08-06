@@ -2,7 +2,7 @@ package br.com.lex4crypto.monolito.service;
 
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.models.Ordem;
-import br.com.lex4crypto.monolito.models.livros.Livro;
+import br.com.lex4crypto.monolito.models.Livro;
 import br.com.lex4crypto.monolito.repositories.LivroRepository;
 import org.springframework.stereotype.Service;
 

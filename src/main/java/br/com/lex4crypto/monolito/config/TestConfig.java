@@ -3,7 +3,6 @@ package br.com.lex4crypto.monolito.config;
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.enums.TipoPermissao;
 import br.com.lex4crypto.monolito.models.*;
-import br.com.lex4crypto.monolito.models.livros.*;
 import br.com.lex4crypto.monolito.repositories.ClienteRepository;
 import br.com.lex4crypto.monolito.repositories.PermissaoRepository;
 import br.com.lex4crypto.monolito.repositories.UsuarioRepository;
