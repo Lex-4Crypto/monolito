@@ -1,6 +1,4 @@
-![CircleCI](https://img.shields.io/circleci/build/gh/Lex-4Crypto/monolito/main)
-
-# Projeto Lex
+# Projeto Lex <img align="right" alt="CircleCI" src="https://img.shields.io/circleci/build/gh/Lex-4Crypto/monolito/main"/>
 
 ### disciplina: Arquitetura de Software e Ágil I (BE-JV-009)
 ### curso: Tomorrow Tech Talents
