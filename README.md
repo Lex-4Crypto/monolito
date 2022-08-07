@@ -1,4 +1,4 @@
-# Projeto Lex <img align="right" alt="CircleCI" src="https://img.shields.io/circleci/build/gh/Lex-4Crypto/monolito/main"/>
+# Projeto Lex [<img align="right" alt="CircleCI status" src="https://circleci.com/gh/Lex-4Crypto/monolito.svg?style=svg"/>](https://circleci.com/gh/Lex-4Crypto/monolito)
 
 ### disciplina: Arquitetura de Software e Ágil I (BE-JV-009)
 ### curso: Tomorrow Tech Talents
@@ -9,7 +9,7 @@
 O projeto consiste em desenvolver uma web API REST que permita as operações básicas de uma corretora de criptomoedas (crypto exchange), aplicando a metodologia de gestão de projetos Ágil (Agile).
 
 **nome da equipe**:
-- lex-4crypto
+- Lex-4Crypto
 
 **Professor titular**:
 - Rafael Rocha [:octocat:](https://github.com/rafarocha)
