@@ -39,11 +39,21 @@ public class CorretoraController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/ordens/compras")
+    ResponseEntity<OrdemDtoResponse> lancarCompra(@RequestBody @Valid OrdemDtoRequest ordemDtoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(corretoraService.lancarCompra(ordemDtoRequest));
+
+//        OrdemDtoResponse response = corretoraService.lancarCompra(ordemDtoRequest);
+//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("corretoras/ordens/compras").toUriString());
+//        return ResponseEntity.created(uri).body(response);
+    }
+
+ /*   @GetMapping
     ResponseEntity<List<OrdemDtoResponse>> findAllOrdem() {
         return ResponseEntity.status(HttpStatus.OK).body(corretoraService.findAll());
     }
-
+ */
      // findByID
     //findByClient ou Username
 }

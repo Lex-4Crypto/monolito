@@ -63,16 +63,26 @@ public class TestConfig implements CommandLineRunner {
         usuarioRepository.save(user2);
 
         Carteira carteiraBitcoin = new Carteira(null, CryptoMoeda.BITCOIN,BigDecimal.TEN);
+        Carteira carteiraBitcoin2 = new Carteira(null, CryptoMoeda.BITCOIN,BigDecimal.valueOf(20.0));
 
         Cliente cliente1 = new Cliente();
         cliente1.setNome("joao");
         cliente1.setUserName(user1.getUsername());
         cliente1.setChavePix("1443216414");
-        cliente1.setConta(new Conta(null,"Real", BigDecimal.TEN));
+        cliente1.setConta(new Conta(null,"Real", BigDecimal.valueOf(1000.00)));
         cliente1.getCarteiras().add(carteiraBitcoin);
 
-        clienteRepository.save(cliente1);
+        Cliente cliente2 = new Cliente();
+        cliente2.setNome("maria");
+        cliente2.setUserName(user2.getUsername());
+        cliente2.setChavePix("1515615");
+        cliente2.setConta(new Conta(null,"Real", BigDecimal.valueOf(2000.00)));
+        cliente2.getCarteiras().add(carteiraBitcoin2);
 
+        clienteRepository.save(cliente1);
+        clienteRepository.save(cliente2);
+
+        //Quando for subir para operação tem que criar um livro para cada cripto
         Livro livroBitcoin = new Livro(CryptoMoeda.BITCOIN, null);
         livroRepository.save(livroBitcoin);
 

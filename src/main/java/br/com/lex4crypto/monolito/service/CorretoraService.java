@@ -12,7 +12,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class CorretoraService {
@@ -60,7 +59,6 @@ public class CorretoraService {
 
         //salvar pedido de venda no livro
         livroService.saveOrdemNoLivro(ordemSalva);
-        ordemService.atribuirStatus(ordemVenda, StatusOrdem.PENDENTE);
 
         //retorna DTO ordem de venda criada
         OrdemDtoResponse response = new OrdemDtoResponse();
@@ -68,31 +66,60 @@ public class CorretoraService {
         return response;
     }
 
-    public Ordem processarOrdemCompra(OrdemDtoRequest ordemDtoRequest) {
-
-        
-
-
-        //verificar se há ordem de venda no livro
-        //Se não retornar uma exceção
+    public OrdemDtoResponse lancarCompra(OrdemDtoRequest ordemDtoRequest) {
 
         //Recuperar cliente
-        Cliente cliente = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
+        Cliente clienteCompra = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
         Ordem ordemCompra = criarOrdem(ordemDtoRequest, TipoOrdem.COMPRA);
 
-        //Executar a ordem
-        if (aprovarSaldoConta(ordemCompra,cliente)){
-            //retorna a carteira e acrescentar criptos
-            Carteira carteira = carteiraService.recuperarCarteiraCliente(ordemCompra);
-            BigDecimal quantidade = carteira.getQuantidade();
-            carteira.setQuantidade(quantidade.add(ordemCompra.getQuantidade()));
+        //Verificar se há ordem de venda compatível no livro
+        Ordem ordemVenda = ordemService.findOrdemVendaCompativelCompra(ordemCompra);
 
-            //salvar no histórico da corretora/cliente, se houver histórico
+        //Executar a ordem
+        if (aprovarSaldoConta(ordemCompra,clienteCompra)){
+            //Atualizar carteira do cliente que comprou com o novo saldo
+            Carteira carteira = carteiraService.recuperarCarteiraCliente(ordemCompra);
+            BigDecimal novaQuantidadeCriptoCarteira = ordemCompra.getQuantidade().add(carteira.getQuantidade());
+            carteiraService.atualizarQuantidadeCrypto(carteira, novaQuantidadeCriptoCarteira);
+
+            //Atualizar conta do cliente que comprou com o novo saldo
+            BigDecimal novoSaldoClienteCompra = clienteCompra
+                    .getConta()
+                    .getSaldo()
+                    .subtract(calcularValorTotalOrdem(ordemCompra));
+            clienteService.updateNovoSaldo(clienteCompra, novoSaldoClienteCompra);
+
+            //Atualizar conta do cliente que vendeu com o novo saldo
+            String usernameClienteVenda = ordemVenda.getUsernameCliente();
+            Cliente clienteVenda = clienteService.findClienteByUsername(usernameClienteVenda);
+            BigDecimal novoSaldoClienteVenda = clienteVenda
+                    .getConta()
+                    .getSaldo()
+                    .add(ordemVenda.getValorTotal());
+            clienteService.updateNovoSaldo(clienteVenda, novoSaldoClienteVenda);
+
+            //Atualizar status das Ordens
+            ordemService.atribuirStatus(ordemVenda, StatusOrdem.CONCLUIDA);
+            ordemService.atribuirStatus(ordemCompra, StatusOrdem.CONCLUIDA);
+
+            //Atulizar ordens
+            Ordem ordemSalvaCompra = vendaService.save(ordemCompra);
+            Ordem ordemSalvaVenda = vendaService.save(ordemVenda);
+
+
+            //Atuaizar livro
+            livroService.saveOrdemNoLivro(ordemCompra);
+            livroService.saveOrdemNoLivro(ordemVenda);
+
+            //retorna DTO ordem de venda criada
+            OrdemDtoResponse response = new OrdemDtoResponse();
+            BeanUtils.copyProperties(ordemSalvaCompra, response);
+            return response;
+
         } else {
             ordemService.atribuirStatus(ordemCompra, StatusOrdem.ERRO);
             throw new SaldoInsuficienteException("Saldo insuficiente");
         }
-        return null;
     }
 
     private Ordem criarOrdem(OrdemDtoRequest ordemDtoRequest, TipoOrdem tipoOrdem){
@@ -128,13 +155,5 @@ public class CorretoraService {
 
     private boolean aprovarSaldoConta(Ordem ordem, Cliente cliente){
         return ordem.getValorTotal().compareTo(cliente.getConta().getSaldo())<=0;
-    }
-
-    private boolean buscarOrdemVenda (Ordem ordem) {
-        return false;
-    }
-
-    public List<OrdemDtoResponse> findAll() {
-        return null;
     }
 }
