@@ -146,4 +146,9 @@ public class ClienteService implements UserDetailsService {
         clienteRepository.delete(cliente);
     }
 
+    public void updateNovoSaldo(Cliente cliente, BigDecimal novoSaldo){
+        cliente.getConta().setSaldo(novoSaldo);
+        clienteRepository.save(cliente);
+    }
+
 }

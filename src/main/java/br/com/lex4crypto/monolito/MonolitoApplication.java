@@ -11,5 +11,4 @@ public class MonolitoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MonolitoApplication.class, args);
 	}
-
 }

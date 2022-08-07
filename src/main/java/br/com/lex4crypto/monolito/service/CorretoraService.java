@@ -2,73 +2,63 @@ package br.com.lex4crypto.monolito.service;
 
 import br.com.lex4crypto.monolito.dtos.OrdemDtoRequest;
 import br.com.lex4crypto.monolito.dtos.OrdemDtoResponse;
-import br.com.lex4crypto.monolito.enums.CryptoMoeda;
+import br.com.lex4crypto.monolito.enums.StatusOrdem;
 import br.com.lex4crypto.monolito.enums.TipoOrdem;
-import br.com.lex4crypto.monolito.exception.CarteiraNotFoundException;
 import br.com.lex4crypto.monolito.exception.SaldoInsuficienteException;
 import br.com.lex4crypto.monolito.models.Carteira;
 import br.com.lex4crypto.monolito.models.Cliente;
 import br.com.lex4crypto.monolito.models.Ordem;
-import br.com.lex4crypto.monolito.repositories.CorretoraRepository;
-import br.com.lex4crypto.monolito.service.livros.LivroBitcoinService;
-import br.com.lex4crypto.monolito.service.livros.LivroCardanoService;
-import br.com.lex4crypto.monolito.service.livros.LivroEthereumService;
-import br.com.lex4crypto.monolito.service.livros.LivroSolanaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class CorretoraService {
 
-    private final CorretoraRepository corretoraRepository;
     private final ClienteService clienteService;
     private final VendaService vendaService;
-    private final LivroBitcoinService livroBitcoinService;
-    private final LivroEthereumService livroEthereumService;
-    private final LivroCardanoService livroCardanoService;
-    private final LivroSolanaService livroSolanaService;
+    private final LivroService livroService;
+    private final CarteiraService carteiraService;
     private final OrdemService ordemService;
 
-    private static final BigDecimal TAXA_CORRETAGEM = BigDecimal.valueOf(0.005); //Pode ser substituído pelo consumo de uma API
+    private static final BigDecimal TAXA_CORRETAGEM = BigDecimal.valueOf(0.005);
 
-    public CorretoraService(CorretoraRepository corretoraRepository, ClienteService clienteService, VendaService vendaService, LivroBitcoinService livroBitcoinService, LivroEthereumService livroEthereumService, LivroCardanoService livroCardanoService, LivroSolanaService livroSolanaService, OrdemService ordemService) {
-        this.corretoraRepository = corretoraRepository;
+    public CorretoraService(ClienteService clienteService, VendaService vendaService, LivroService livroService, CarteiraService carteiraService, OrdemService ordemService) {
         this.clienteService = clienteService;
         this.vendaService = vendaService;
-        this.livroBitcoinService = livroBitcoinService;
-        this.livroEthereumService = livroEthereumService;
-        this.livroCardanoService = livroCardanoService;
-        this.livroSolanaService = livroSolanaService;
+        this.livroService = livroService;
+        this.carteiraService = carteiraService;
         this.ordemService = ordemService;
     }
 
     public OrdemDtoResponse lancarVenda(OrdemDtoRequest ordemDtoRequest){
+
         //obter dados usuario
         Cliente cliente = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
 
+        //criar ordem de venda
+        Ordem ordemVenda = criarOrdem(ordemDtoRequest, TipoOrdem.VENDA);
+
         //validar pedido de venda
-        Carteira carteiraCrypto = recuperarCarteiraCrypto(cliente, ordemDtoRequest.getCryptoMoeda());
-        BigDecimal valorTotal = ordemDtoRequest.getValorUnitario().multiply(ordemDtoRequest.getQuantidade());
-        if (!verificarSaldo(carteiraCrypto,valorTotal)){
+        Carteira carteiraCrypto = carteiraService.recuperarCarteiraCliente(ordemVenda);
+
+        if(!aprovarQuantidadeCripto(carteiraCrypto,ordemVenda.getQuantidade())) {
+            ordemService.atribuirStatus(ordemVenda, StatusOrdem.ERRO);
             throw new SaldoInsuficienteException("Saldo insuficiente. Saldo do cliente: " +
                     carteiraCrypto.getQuantidade() + " " + carteiraCrypto.getCryptoMoeda().toString());
         }
 
-        //criar ordem de venda
-        Ordem ordemVenda = new Ordem();
-        BeanUtils.copyProperties(ordemDtoRequest, ordemVenda);
-        ordemVenda.setTipoOrdem(TipoOrdem.VENDA);
-        calcularValorOrdem(ordemVenda);
-        ordemVenda.setValorTaxaCorretagem(calcularTaxaCorretagem(ordemVenda));
-        ordemVenda.setValorTotal(calcularValorTotalOrdem(ordemVenda));
+
+        //salvar nova quantidade na carteira
+        BigDecimal novaQuantidadeCriptoCarteira = carteiraCrypto.getQuantidade().subtract(ordemVenda.getQuantidade());
+        Carteira carteira = carteiraService.atualizarQuantidadeCrypto(carteiraCrypto, novaQuantidadeCriptoCarteira);
 
         //salvar pedido de venda
         Ordem ordemSalva = vendaService.save(ordemVenda);
+
         //salvar pedido de venda no livro
-        registrarVendaNoLivro(ordemSalva, ordemSalva.getCryptoMoeda());
+        livroService.saveOrdemNoLivro(ordemSalva);
 
         //retorna DTO ordem de venda criada
         OrdemDtoResponse response = new OrdemDtoResponse();
@@ -76,57 +66,82 @@ public class CorretoraService {
         return response;
     }
 
-//    public OrdemDtoResponse processarOrdem(OrdemDtoRequest ordemDtoRequest) {
-//
-//        //Recuperar cliente
-//        Cliente cliente = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
-//
-//        //Atribuir tipo da ordem
-//        Ordem ordem = verificarTipoOrdem(ordemDtoRequest);
-//
-//        //Atribuir valor total da corretagem
-//        ordem.setValorTaxaCorretagem(calcularTaxaCorretagem(ordem));
-//
-//        //Atribuir valor total da ordem
-//        ordem.setValorTotal(calcularValorTotalOrdem(ordem));
-//
-//        //Executar a ordem
-//        if (aprovarSaldo(ordem,cliente)){
-//            ordem.executar(cliente);
-//        }else {
-//            throw new SaldoInsuficienteException("Saldo insuficiente");
-//        }
-//
-//        return null;
-//    }
+    public OrdemDtoResponse lancarCompra(OrdemDtoRequest ordemDtoRequest) {
 
-//    public Ordem verificarTipoOrdem(OrdemDtoRequest ordemDtoRequest){
-//        if (ordemDtoRequest.getTipoOrdem().equals(TipoOrdem.VENDA)){
-//            OrdemVenda ordemVenda = new OrdemVenda();
-//            BeanUtils.copyProperties(ordemDtoRequest, ordemVenda);
-//            return ordemVenda;
-//        }else {
-//            OrdemCompra ordemCompra = new OrdemCompra();
-//            BeanUtils.copyProperties(ordemDtoRequest, ordemCompra);
-//            return ordemCompra;
-//        }
-//    }
+        //Recuperar cliente
+        Cliente clienteCompra = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
+        Ordem ordemCompra = criarOrdem(ordemDtoRequest, TipoOrdem.COMPRA);
 
-    private Carteira recuperarCarteiraCrypto(Cliente cliente, CryptoMoeda cryptoMoeda){
+        //Verificar se há ordem de venda compatível no livro
+        Ordem ordemVenda = ordemService.findOrdemVendaCompativelCompra(ordemCompra);
 
-        return cliente.getCarteiras().stream()
-                .filter(carteira -> carteira.getCryptoMoeda().equals(cryptoMoeda)).findAny()
-                .orElseThrow(() -> new CarteiraNotFoundException("Usuario " + cliente.getUserName()
-                        + "não tem carteira da crypto moeda " + cryptoMoeda.toString()));
+        //Executar a ordem
+        if (aprovarSaldoConta(ordemCompra,clienteCompra)){
+            //Atualizar carteira do cliente que comprou com o novo saldo
+            Carteira carteira = carteiraService.recuperarCarteiraCliente(ordemCompra);
+            BigDecimal novaQuantidadeCriptoCarteira = ordemCompra.getQuantidade().add(carteira.getQuantidade());
+            carteiraService.atualizarQuantidadeCrypto(carteira, novaQuantidadeCriptoCarteira);
+
+            //Atualizar conta do cliente que comprou com o novo saldo
+            BigDecimal novoSaldoClienteCompra = clienteCompra
+                    .getConta()
+                    .getSaldo()
+                    .subtract(calcularValorTotalOrdem(ordemCompra));
+            clienteService.updateNovoSaldo(clienteCompra, novoSaldoClienteCompra);
+
+            //Atualizar conta do cliente que vendeu com o novo saldo
+            String usernameClienteVenda = ordemVenda.getUsernameCliente();
+            Cliente clienteVenda = clienteService.findClienteByUsername(usernameClienteVenda);
+            BigDecimal novoSaldoClienteVenda = clienteVenda
+                    .getConta()
+                    .getSaldo()
+                    .add(ordemVenda.getValorTotal());
+            clienteService.updateNovoSaldo(clienteVenda, novoSaldoClienteVenda);
+
+            //Atualizar status das Ordens
+            ordemService.atribuirStatus(ordemVenda, StatusOrdem.CONCLUIDA);
+            ordemService.atribuirStatus(ordemCompra, StatusOrdem.CONCLUIDA);
+
+            //Atulizar ordens
+            Ordem ordemSalvaCompra = vendaService.save(ordemCompra);
+            Ordem ordemSalvaVenda = vendaService.save(ordemVenda);
+
+
+            //Atuaizar livro
+            livroService.saveOrdemNoLivro(ordemCompra);
+            livroService.saveOrdemNoLivro(ordemVenda);
+
+            //retorna DTO ordem de venda criada
+            OrdemDtoResponse response = new OrdemDtoResponse();
+            BeanUtils.copyProperties(ordemSalvaCompra, response);
+            return response;
+
+        } else {
+            ordemService.atribuirStatus(ordemCompra, StatusOrdem.ERRO);
+            throw new SaldoInsuficienteException("Saldo insuficiente");
+        }
     }
 
-    private boolean verificarSaldo(Carteira carteira, BigDecimal valor){
-       return carteira.getQuantidade().compareTo(valor) <= 0;
+    private Ordem criarOrdem(OrdemDtoRequest ordemDtoRequest, TipoOrdem tipoOrdem){
+        Ordem ordem = new Ordem();
+        BeanUtils.copyProperties(ordemDtoRequest, ordem);
+        ordem.setTipoOrdem(tipoOrdem);
+        ordem.setValorTaxaCorretagem(calcularTaxaCorretagem(ordem));
+        ordem.setValorTotal(calcularValorTotalOrdem(ordem));
+        ordem.setStatusOrdem(StatusOrdem.PENDENTE);
+        return ordem;
+    }
+
+    private boolean aprovarQuantidadeCripto(Carteira carteira, BigDecimal quantidadeOrdem){
+        return carteira.getQuantidade().compareTo(quantidadeOrdem) >= 0;
     }
 
     //---------------------------------------------
     private BigDecimal calcularValorTotalOrdem(Ordem ordem) {
-        return calcularTaxaCorretagem(ordem).add(calcularValorOrdem(ordem));
+        if (ordem.getTipoOrdem().equals(TipoOrdem.COMPRA)) {
+            return calcularTaxaCorretagem(ordem).add(calcularValorOrdem(ordem));
+        }
+        return calcularValorOrdem(ordem).subtract(calcularTaxaCorretagem(ordem));
     }
 
     private BigDecimal calcularTaxaCorretagem(Ordem ordem) {
@@ -138,24 +153,7 @@ public class CorretoraService {
                 .multiply(ordem.getQuantidade());
     }
 
-//    private boolean aprovarSaldo(Ordem ordem, Cliente cliente){
-//        return ordem.getValorTotal().compareTo(cliente.getConta().getSaldo())<=0;
-//    }
-
-    private void registrarVendaNoLivro(Ordem ordem, CryptoMoeda cryptoMoeda){
-        switch (cryptoMoeda){
-            case BITCOIN -> livroBitcoinService.saveOrdemVenda(ordem);
-            case  ETHEREUM -> livroEthereumService.saveOrdemVenda(ordem);
-            case CARDANO -> livroCardanoService.saveOrdemVenda(ordem);
-            case SOLANA -> livroSolanaService.saveOrdemVenda(ordem);
-        }
-    }
-
-    private boolean buscarOrdemVenda (Ordem ordem) {
-        return false;
-    }
-
-    public List<OrdemDtoResponse> findAll() {
-        return null;
+    private boolean aprovarSaldoConta(Ordem ordem, Cliente cliente){
+        return ordem.getValorTotal().compareTo(cliente.getConta().getSaldo())<=0;
     }
 }
