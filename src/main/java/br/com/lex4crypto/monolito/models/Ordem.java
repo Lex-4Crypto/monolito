@@ -24,12 +24,15 @@ public class Ordem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Enumerated(EnumType.STRING)
     protected TipoOrdem tipoOrdem;
+    @Enumerated(EnumType.STRING)
     protected CryptoMoeda cryptoMoeda;
     protected BigDecimal quantidade;
     protected BigDecimal valorUnitario;
     protected BigDecimal valorTaxaCorretagem;
     protected BigDecimal valorTotal;
     protected String usernameCliente;
+    @Enumerated(EnumType.STRING)
     private StatusOrdem statusOrdem;
 }

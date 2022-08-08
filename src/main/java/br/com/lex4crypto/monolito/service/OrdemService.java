@@ -8,6 +8,7 @@ import br.com.lex4crypto.monolito.models.Ordem;
 import br.com.lex4crypto.monolito.repositories.OrdemRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +68,10 @@ public class OrdemService {
         Optional<Ordem> ordemVendaDisponivel = findVendas().stream()
                 .filter(ordem -> ordem.getStatusOrdem().equals(StatusOrdem.PENDENTE))
                 .filter(ordem -> ordem.getQuantidade().compareTo(ordemCompra.getQuantidade()) == 0)
+                .filter(ordem ->ordem.getValorUnitario().compareTo(ordemCompra.getValorUnitario()) == 0)
                 .findFirst();
         if (ordemVendaDisponivel.isEmpty()){
+            ordemCompra.setValorTaxaCorretagem(BigDecimal.ZERO);
             atribuirStatus(ordemCompra, StatusOrdem.ERRO);
             throw new SaldoInsuficienteException(
                     "Não há ordem disponível para se comprar nesta quantidade. Quantidade: " +
@@ -77,9 +80,5 @@ public class OrdemService {
 
         return ordemVendaDisponivel.get();
     }
-
-    //executar a ordem:
-
-    //retornar a carteira que deverá ser preenchida
 
 }
