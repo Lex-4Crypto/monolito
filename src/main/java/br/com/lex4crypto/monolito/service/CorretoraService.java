@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class CorretoraService {
@@ -40,6 +41,9 @@ public class CorretoraService {
         //criar ordem de venda
         Ordem ordemVenda = criarOrdem(ordemDtoRequest, TipoOrdem.VENDA);
 
+        //Adicionar ordem no historico do cliente
+        cliente.getHistoricoOrdens().add(ordemVenda);
+
         //validar pedido de venda
         Carteira carteiraCrypto = carteiraService.recuperarCarteiraCliente(ordemVenda);
 
@@ -52,7 +56,7 @@ public class CorretoraService {
 
         //salvar nova quantidade na carteira
         BigDecimal novaQuantidadeCriptoCarteira = carteiraCrypto.getQuantidade().subtract(ordemVenda.getQuantidade());
-        Carteira carteira = carteiraService.atualizarQuantidadeCrypto(carteiraCrypto, novaQuantidadeCriptoCarteira);
+        carteiraService.atualizarQuantidadeCrypto(carteiraCrypto, novaQuantidadeCriptoCarteira);
 
         //salvar pedido de venda
         Ordem ordemSalva = vendaService.save(ordemVenda);
@@ -71,6 +75,9 @@ public class CorretoraService {
         //Recuperar cliente
         Cliente clienteCompra = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
         Ordem ordemCompra = criarOrdem(ordemDtoRequest, TipoOrdem.COMPRA);
+
+        //Adicionar ordem no historico do cliente
+        clienteCompra.getHistoricoOrdens().add(ordemCompra);
 
         //Verificar se há ordem de venda compatível no livro
         Ordem ordemVenda = ordemService.findOrdemVendaCompativelCompra(ordemCompra);
@@ -102,12 +109,12 @@ public class CorretoraService {
             ordemService.atribuirStatus(ordemVenda, StatusOrdem.CONCLUIDA);
             ordemService.atribuirStatus(ordemCompra, StatusOrdem.CONCLUIDA);
 
-            //Atulizar ordens
+            //Atualizar ordens
             Ordem ordemSalvaCompra = vendaService.save(ordemCompra);
-            Ordem ordemSalvaVenda = vendaService.save(ordemVenda);
+            vendaService.save(ordemVenda);
 
 
-            //Atuaizar livro
+            //Atualizar livro
             livroService.saveOrdemNoLivro(ordemCompra);
             livroService.saveOrdemNoLivro(ordemVenda);
 
@@ -156,4 +163,5 @@ public class CorretoraService {
     private boolean aprovarSaldoConta(Ordem ordem, Cliente cliente){
         return ordem.getValorTotal().compareTo(cliente.getConta().getSaldo())<=0;
     }
+
 }

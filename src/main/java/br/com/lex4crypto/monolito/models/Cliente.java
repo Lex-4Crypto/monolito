@@ -35,4 +35,8 @@ public class Cliente implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "carteira_principal_id")
     private Conta conta = new Conta();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    protected List<Ordem> historicoOrdens;
 }
