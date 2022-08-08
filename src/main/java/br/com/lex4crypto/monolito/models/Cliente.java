@@ -28,6 +28,10 @@ public class Cliente implements Serializable {
     @JoinColumn (name = "cliente_id")
     private List<Carteira> carteiras = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn (name = "cartao_id")
+    private List<Cartao> cartoes = new ArrayList<>();
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "carteira_principal_id")
     private Conta conta = new Conta();
