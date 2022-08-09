@@ -66,6 +66,7 @@ public class OrdemService {
 
     public Ordem findOrdemVendaCompativelCompra(Ordem ordemCompra){
         Optional<Ordem> ordemVendaDisponivel = findVendas().stream()
+                .filter(ordem -> ordem.getCryptoMoeda().equals(ordemCompra.getCryptoMoeda()))
                 .filter(ordem -> ordem.getStatusOrdem().equals(StatusOrdem.PENDENTE))
                 .filter(ordem -> ordem.getQuantidade().compareTo(ordemCompra.getQuantidade()) == 0)
                 .filter(ordem ->ordem.getValorUnitario().compareTo(ordemCompra.getValorUnitario()) == 0)

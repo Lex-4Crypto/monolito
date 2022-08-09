@@ -21,6 +21,7 @@ public class LivroService {
 
     public Livro findLivro(CryptoMoeda cryptoMoeda) {
         return livroRepository.findAll().stream()
+                .filter(livro -> livro.getCryptoMoeda().equals(cryptoMoeda))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Livro não existe"));
     }

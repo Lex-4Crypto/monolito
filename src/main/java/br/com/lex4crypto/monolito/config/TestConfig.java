@@ -64,6 +64,7 @@ public class TestConfig implements CommandLineRunner {
 
         Carteira carteiraBitcoin = new Carteira(null, CryptoMoeda.BITCOIN,BigDecimal.TEN);
         Carteira carteiraBitcoin2 = new Carteira(null, CryptoMoeda.BITCOIN,BigDecimal.valueOf(20.0));
+        Carteira carteiraSolana = new Carteira(null, CryptoMoeda.SOLANA,BigDecimal.valueOf(15.0));
 
         Cliente cliente1 = new Cliente();
         cliente1.setNome("joao");
@@ -71,6 +72,7 @@ public class TestConfig implements CommandLineRunner {
         cliente1.setChavePix("1443216414");
         cliente1.setConta(new Conta(null,"Real", BigDecimal.valueOf(1000.00)));
         cliente1.getCarteiras().add(carteiraBitcoin);
+        cliente1.getCarteiras().add(carteiraSolana);
 
         Cliente cliente2 = new Cliente();
         cliente2.setNome("maria");

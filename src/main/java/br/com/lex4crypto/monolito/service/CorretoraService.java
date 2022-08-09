@@ -41,9 +41,6 @@ public class CorretoraService {
         //criar ordem de venda
         Ordem ordemVenda = criarOrdem(ordemDtoRequest, TipoOrdem.VENDA);
 
-        //Adicionar ordem no historico do cliente
-        cliente.getHistoricoOrdens().add(ordemVenda);
-
         //validar pedido de venda
         Carteira carteiraCrypto = carteiraService.recuperarCarteiraCliente(ordemVenda);
 
@@ -75,9 +72,6 @@ public class CorretoraService {
         //Recuperar cliente
         Cliente clienteCompra = clienteService.findClienteByUsername(ordemDtoRequest.getUsernameCliente());
         Ordem ordemCompra = criarOrdem(ordemDtoRequest, TipoOrdem.COMPRA);
-
-        //Adicionar ordem no historico do cliente
-        clienteCompra.getHistoricoOrdens().add(ordemCompra);
 
         //Verificar se há ordem de venda compatível no livro
         Ordem ordemVenda = ordemService.findOrdemVendaCompativelCompra(ordemCompra);
