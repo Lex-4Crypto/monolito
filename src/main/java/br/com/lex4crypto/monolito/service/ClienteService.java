@@ -5,6 +5,7 @@ import br.com.lex4crypto.monolito.dtos.ClienteDtoResponseCompleto;
 import br.com.lex4crypto.monolito.dtos.ClienteDtoResponseSimples;
 import br.com.lex4crypto.monolito.enums.TipoPermissao;
 import br.com.lex4crypto.monolito.models.Cliente;
+import br.com.lex4crypto.monolito.models.Ordem;
 import br.com.lex4crypto.monolito.models.Permissao;
 import br.com.lex4crypto.monolito.models.Usuario;
 import br.com.lex4crypto.monolito.repositories.ClienteRepository;
