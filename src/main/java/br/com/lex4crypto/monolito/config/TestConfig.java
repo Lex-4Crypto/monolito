@@ -3,10 +3,7 @@ package br.com.lex4crypto.monolito.config;
 import br.com.lex4crypto.monolito.enums.CryptoMoeda;
 import br.com.lex4crypto.monolito.enums.TipoPermissao;
 import br.com.lex4crypto.monolito.models.*;
-import br.com.lex4crypto.monolito.repositories.ClienteRepository;
-import br.com.lex4crypto.monolito.repositories.PermissaoRepository;
-import br.com.lex4crypto.monolito.repositories.UsuarioRepository;
-import br.com.lex4crypto.monolito.repositories.LivroRepository;
+import br.com.lex4crypto.monolito.repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -25,15 +22,17 @@ public class TestConfig implements CommandLineRunner {
     private final PermissaoRepository permissaoRepository;
     private final PasswordEncoder passwordEncoder;
     private final LivroRepository livroRepository;
-
     private final ClienteRepository clienteRepository;
 
-    public TestConfig(UsuarioRepository usuarioRepository, PermissaoRepository permissaoRepository, PasswordEncoder passwordEncoder, LivroRepository livroRepository, ClienteRepository clienteRepository) {
+    private final AdminsitradoraRepository adminsitradoraRepository;
+
+    public TestConfig(UsuarioRepository usuarioRepository, PermissaoRepository permissaoRepository, PasswordEncoder passwordEncoder, LivroRepository livroRepository, ClienteRepository clienteRepository, AdminsitradoraRepository adminsitradoraRepository) {
         this.usuarioRepository = usuarioRepository;
         this.permissaoRepository = permissaoRepository;
         this.passwordEncoder = passwordEncoder;
         this.livroRepository = livroRepository;
         this.clienteRepository = clienteRepository;
+        this.adminsitradoraRepository = adminsitradoraRepository;
     }
 
     @Override
@@ -83,6 +82,11 @@ public class TestConfig implements CommandLineRunner {
 
         clienteRepository.save(cliente1);
         clienteRepository.save(cliente2);
+
+        //Quando for subir para operação tem que criar a administradora
+        Administradora administradora = new Administradora("Lex-4Crypto", 0d);
+        adminsitradoraRepository.save(administradora);
+
 
         //Quando for subir para operação tem que criar um livro para cada cripto
         Livro livroBitcoin = new Livro(CryptoMoeda.BITCOIN, null);

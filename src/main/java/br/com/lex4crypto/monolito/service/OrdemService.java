@@ -82,4 +82,11 @@ public class OrdemService {
         return ordemVendaDisponivel.get();
     }
 
+    public double calcularCorretagem() {
+        return ordemRepository.findAll()
+                .stream()
+                .filter(ordem -> ordem.getStatusOrdem().equals(StatusOrdem.CONCLUIDA))
+                .mapToDouble(ordem -> ordem.getValorTaxaCorretagem().doubleValue())
+                .sum();
+    }
 }
